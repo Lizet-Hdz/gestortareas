@@ -1,12 +1,13 @@
 const path = requiere('path'); 
 
 module.exports = {
- entry: './src/index.js', //punto de entrada de tu aplicación
- output: {
+    mode: "development", //para saber si esta en desarrolo o producción
+    entry: './src/index.js', //punto de entrada de tu aplicación
+    output: {
     filename: 'bundle.js', //Nombre del archivo de salida
     path: path.resolve(__dirname, 'dist'), //Carpeta de salida
  } ,
-module: {
+    module: {
     rules: [
         {
             test: /\.css$/, //Regex para identificar archivos CSS
@@ -26,7 +27,10 @@ module: {
  },
   devtool: 'source-map' //Genera source maps para facilitar la depuración
   devServer:{
-       contentBase: path.resolve(__dirname, 'dist') //Carpeta que correrá el servidor
+    static: { 
+        directory: path.resolve(__dirname, 'dist'), //carpeta del que correra el servidor
+    },
        compress: true, //Habilitar compresión gzip
        port: 9000, //puerto del servidor de desarrollo
+   },
 },
