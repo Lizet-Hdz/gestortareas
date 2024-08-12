@@ -1,4 +1,4 @@
-const path = requiere('path'); 
+const path = require('path'); 
 
 module.exports = {
     mode: "development", //para saber si esta en desarrolo o producción
@@ -25,12 +25,12 @@ module.exports = {
         },
     ],
  },
-  devtool: 'source-map' //Genera source maps para facilitar la depuración
-  devServer:{
+  devtool: 'source-map', //Genera source maps para facilitar la depuración
+  devServer: {
     static: { 
         directory: path.resolve(__dirname, 'dist'), //carpeta del que correra el servidor
     },
        compress: true, //Habilitar compresión gzip
        port: 9000, //puerto del servidor de desarrollo
    },
-},
+};
