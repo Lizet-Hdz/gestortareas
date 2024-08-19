@@ -11,8 +11,11 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   addTask: () => (/* binding */ addTask),
-/* harmony export */   getTasks: () => (/* binding */ getTasks)
+/* harmony export */   deleteTask: () => (/* binding */ deleteTask),
+/* harmony export */   getTasks: () => (/* binding */ getTasks),
+/* harmony export */   updateTask: () => (/* binding */ updateTask)
 /* harmony export */ });
+//Lista de tareas
 var tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
 //Función para agregar tareas
@@ -29,6 +32,25 @@ var addTask = function addTask(task) {
 //Función para poder traer la lista de tareas
 var getTasks = function getTasks() {
   return tasks;
+};
+
+//Función para eliminar una tarea de la lista
+var deleteTask = function deleteTask(id) {
+  tasks = tasks.filter(function (task) {
+    return task.id !== parseInt(id);
+  });
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+};
+
+//Función para actualizar una tarea
+var updateTask = function updateTask(id) {
+  tasks = tasks.map(function (task) {
+    if (task.id === parseInt(id)) {
+      task.completed = !task.completed;
+    }
+    return task;
+  });
+  localStorage.setItem('tasks', JSON.stringify(tasks));
 };
 
 /***/ }),
@@ -125,13 +147,13 @@ var __webpack_exports__ = {};
   !*** ./src/index.js ***!
   \**********************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./task */ "./src/task.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./ui */ "./src/ui.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ui */ "./src/ui.js");
+/* harmony import */ var _task__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./task */ "./src/task.js");
 
 
 document.addEventListener("DOMContentLoaded", function () {
   // Hcaemos visible la lista de Tareas
-  (0,_ui__WEBPACK_IMPORTED_MODULE_1__.renderTasks)();
+  (0,_ui__WEBPACK_IMPORTED_MODULE_0__.renderTasks)();
 
   //Agregar  el evento para la función para agregar tareas
   document.getElementById("task-form").addEventListener("submit", function (e) {
@@ -139,13 +161,27 @@ document.addEventListener("DOMContentLoaded", function () {
     var taskInput = document.getElementById("task-input");
     if (taskInput.value !== "") {
       //Agregamos la tarea
-      (0,_task__WEBPACK_IMPORTED_MODULE_0__.addTask)(taskInput.value);
+      (0,_task__WEBPACK_IMPORTED_MODULE_1__.addTask)(taskInput.value);
 
       //Volvemos a cargar la lista de tareas
-      (0,_ui__WEBPACK_IMPORTED_MODULE_1__.renderTasks)();
+      (0,_ui__WEBPACK_IMPORTED_MODULE_0__.renderTasks)();
 
       //Limpiar el input
       document.getElementById("task-input").value = "";
+    }
+  });
+
+  //Agregar el evento para los botones
+  document.getElementById("task-list").addEventListener("click", function (e) {
+    if (e.target.classList.contains("delete")) {
+      var taskId = e.target.parentElement.getAttribute("data-id");
+      (0,_task__WEBPACK_IMPORTED_MODULE_1__.deleteTask)(taskId);
+      (0,_ui__WEBPACK_IMPORTED_MODULE_0__.renderTasks)();
+    }
+    if (e.target.classList.contains("toggle")) {
+      var _taskId = e.target.parentElement.getAttribute("data-id");
+      (0,_task__WEBPACK_IMPORTED_MODULE_1__.updateTask)(_taskId);
+      (0,_ui__WEBPACK_IMPORTED_MODULE_0__.renderTasks)();
     }
   });
 });
